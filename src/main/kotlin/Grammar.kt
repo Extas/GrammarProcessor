@@ -2,7 +2,7 @@
  * @author Extas
  * @date 2021/11/11 15:58
  */
-class Grammar() {
+class Grammar {
     lateinit var startSymbol: Symbol
 
     val nonterminalSymbols = mutableSetOf<Symbol>()
@@ -62,19 +62,42 @@ class Grammar() {
         }
     }
 
-    // 去除不可终止规则
+    // 去除不可终结规则
     fun removeNonterminalRules() {
+        // 可终结规则： 右侧都是可终结符
         val stoppableRules = mutableSetOf<Rule>()
+
+        // 可终结的非终结符：是可终结规则的左侧
         val stoppableSymbols = mutableSetOf<Symbol>()
 
-        for (rule in rules) {
-            if (rule.right.all { it.isTerminal || it.isEpsilon }) {
-                stoppableRules.add(rule)
-                stoppableSymbols.add(rule.left)
+        while (true) {
+
+            val oldRules: MutableSet<Rule> = mutableSetOf<Rule>().apply { addAll(stoppableRules) }
+
+            for (rule in rules) {
+                if (rule.right.all { it.isTerminal || it.isEpsilon || stoppableSymbols.contains(it) }) {
+                    stoppableRules.add(rule)
+                    stoppableSymbols.add(rule.left)
+                }
+            }
+
+            if (oldRules == stoppableRules) {
+                break
             }
         }
 
-        
+        rules.clear()
+        rules.addAll(stoppableRules)
+
+        nonterminalSymbols.clear()
+        nonterminalSymbols.addAll(stoppableSymbols)
+
+        terminalSymbols.clear()
+        terminalSymbols.also {
+            for (rule in rules) {
+                it.addAll(rule.right.filter { it.isTerminal })
+            }
+        }
     }
 
 
