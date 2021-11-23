@@ -42,17 +42,23 @@ class Grammar() {
     fun removeUselessSymbols() {
         val symbolsToRemove = mutableSetOf<Symbol>()
 
-        for (rule in rules) {
-            for (otherRule in rules){
-                if (!otherRule.right.contains(rule.left)) {
+        var flag = true
+
+        while (flag) {
+            flag = false
+
+            for (rule in rules) {
+                if (rule.left != startSymbol && rules.all { !it.right.contains(rule.left) }) {
                     symbolsToRemove.add(rule.left)
+                    flag = true // 如果有删除，则继续循环
                 }
             }
-        }
 
-        for (symbol in symbolsToRemove) {
-            rules.removeAll { it.left == symbol }
-            nonterminalSymbols.remove(symbol)
+            for (symbol in symbolsToRemove) {
+                rules.removeAll { it.left == symbol }
+                rules.removeAll { it.right.contains(symbol) }
+                nonterminalSymbols.remove(symbol)
+            }
         }
     }
 

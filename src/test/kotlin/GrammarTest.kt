@@ -49,5 +49,24 @@ internal class GrammarTest {
         )
     }
 
+    @Test
+    fun removeUselessSymbols() {
+        val grammar = Grammar.fromString(
+            "S -> aT \n" +
+                    " T -> bc \n" +
+                    " U -> U \n" +
+                    " U -> V \n" +
+                    " V -> v"
+        )
+        grammar.removeHarmfulRules()
+        grammar.removeUselessSymbols()
+        assertEquals(
+            mutableSetOf(
+                Grammar.Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
+                Grammar.Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+            ), grammar.rules
+        )
+    }
+
 
 }
