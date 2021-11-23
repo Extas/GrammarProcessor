@@ -21,7 +21,7 @@ class Grammar {
 
     // 去除有害规则
     fun removeHarmfulRules() {
-        val rules = ruleManager.getRules()
+        val rules = ruleManager.getAllRules()
         val ruleToRemove = mutableSetOf<Rule>()
 
         for (rule in rules) {
@@ -49,7 +49,7 @@ class Grammar {
 
     // 去除不可到达规则
     fun removeUselessSymbols() {
-        val rules = ruleManager.getRules()
+        val rules = ruleManager.getAllRules()
         val symbolsToRemove = mutableSetOf<Symbol>()
 
         var flag = true
@@ -73,8 +73,8 @@ class Grammar {
     }
 
     // 去除不可终结规则
-    fun removeNonterminalRules() {
-        val rules = ruleManager.getRules()
+    private fun removeNonterminalRules() {
+        val rules = ruleManager.getAllRules()
         // 可终结规则： 右侧都是可终结符
         val stoppableRules = mutableSetOf<Rule>()
 
@@ -111,11 +111,15 @@ class Grammar {
         }
     }
 
-    fun addRule(left: Symbol, right: List<Symbol>) {
+    fun addRule(left: Symbol, right: MutableList<Symbol>) {
         ruleManager.addRule(Rule(left, right))
     }
 
-    fun deleteRule(rule: Rule) {
+    fun addRule(rule: Rule) {
+        ruleManager.addRule(rule)
+    }
+
+    fun removeRule(rule: Rule) {
         ruleManager.deleteRule(rule)
     }
 
@@ -124,7 +128,11 @@ class Grammar {
     }
 
     fun getRules(): MutableSet<Rule> {
-        return ruleManager.getRules()
+        return ruleManager.getAllRules()
+    }
+
+    fun getRulesBySymbol(symbol: Symbol): MutableSet<Rule> {
+        return ruleManager.getRulesBySymbol(symbol)
     }
 
     companion object {
@@ -140,7 +148,7 @@ class Grammar {
                 val rightSymbols = right.map { Symbol(it) }
                 grammar.nonterminalSymbols.add(leftSymbol)
                 grammar.terminalSymbols.addAll(rightSymbols.filter { it.isTerminal })
-                grammar.addRule(leftSymbol, rightSymbols)
+                grammar.addRule(leftSymbol, rightSymbols as MutableList<Symbol>)
             }
             grammar.startSymbol = grammar.nonterminalSymbols.first()
             return grammar

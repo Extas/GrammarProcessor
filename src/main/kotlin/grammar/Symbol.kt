@@ -7,6 +7,11 @@ package grammar
 class Symbol(val char: String) {
     constructor(char: Char) : this(char.toString())
 
+    fun derivedSymbols(time: Int): Symbol {
+        val newChar = "${char}${time + 1}"
+        return Symbol(newChar)
+    }
+
     val isTerminal: Boolean
         get() = char[0] in 'a'..'z'
 

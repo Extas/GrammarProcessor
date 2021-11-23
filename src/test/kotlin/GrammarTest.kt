@@ -1,7 +1,7 @@
 import grammar.Grammar
 import grammar.Rule
 import grammar.Symbol
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 /**
@@ -33,8 +33,8 @@ internal class GrammarTest {
         val grammar = Grammar.fromString("S -> aT \n T -> bc")
         assertEquals(
             mutableSetOf(
-                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c")))
+                Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c")))
             ), grammar.getRules()
         )
     }
@@ -45,9 +45,9 @@ internal class GrammarTest {
         grammar.removeHarmfulRules()
         assertEquals(
             mutableSetOf(
-                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
-                Rule(Symbol("U"), listOf(Symbol("T")))
+                Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
+                Rule(Symbol("U"), mutableListOf(Symbol("T")))
             ), grammar.getRules()
         )
     }
@@ -67,8 +67,8 @@ internal class GrammarTest {
         grammar.removeUselessSymbols()
         assertEquals(
             mutableSetOf(
-                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+                Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
             ), grammar.getRules()
         )
     }
@@ -92,8 +92,8 @@ internal class GrammarTest {
         grammar.simplifiedGrammar()
         assertEquals(
             mutableSetOf(
-                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+                Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
             ), grammar.getRules()
         )
     }

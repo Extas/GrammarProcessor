@@ -7,15 +7,23 @@ package grammar
 class RuleManager {
     private val rules = mutableSetOf<Rule>()
 
+    private val ruleMap = mutableMapOf<Symbol, MutableSet<Rule>>()
+
     fun addRule(rule: Rule) {
+        ruleMap.getOrPut(rule.left) { mutableSetOf() }.add(rule)
         rules.add(rule)
     }
 
     fun deleteRule(rule: Rule) {
+        ruleMap.getOrPut(rule.left) { mutableSetOf() }.remove(rule)
         rules.remove(rule)
     }
 
-    fun getRules(): MutableSet<Rule> {
+    fun getRulesBySymbol(symbol: Symbol): MutableSet<Rule> {
+        return ruleMap.getOrDefault(symbol, mutableSetOf())
+    }
+
+    fun getAllRules(): MutableSet<Rule> {
         return rules
     }
 }

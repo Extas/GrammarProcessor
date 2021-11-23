@@ -4,7 +4,7 @@ package grammar
  * @author Extas
  * @date 2021/11/23 20:45
  */
-class Rule(val left: Symbol, val right: List<Symbol>) {
+class Rule(val left: Symbol, val right: MutableList<Symbol>) {
     override fun toString(): String {
         return "$left -> ${right.joinToString(" ")}"
     }
