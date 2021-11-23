@@ -1,3 +1,6 @@
+import grammar.Grammar
+import grammar.Rule
+import grammar.Symbol
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -30,9 +33,9 @@ internal class GrammarTest {
         val grammar = Grammar.fromString("S -> aT \n T -> bc")
         assertEquals(
             mutableSetOf(
-                Grammar.Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Grammar.Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c")))
-            ), grammar.rules
+                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c")))
+            ), grammar.getRules()
         )
     }
 
@@ -42,10 +45,10 @@ internal class GrammarTest {
         grammar.removeHarmfulRules()
         assertEquals(
             mutableSetOf(
-                Grammar.Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Grammar.Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
-                Grammar.Rule(Symbol("U"), listOf(Symbol("T")))
-            ), grammar.rules
+                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+                Rule(Symbol("U"), listOf(Symbol("T")))
+            ), grammar.getRules()
         )
     }
 
@@ -64,9 +67,9 @@ internal class GrammarTest {
         grammar.removeUselessSymbols()
         assertEquals(
             mutableSetOf(
-                Grammar.Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Grammar.Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
-            ), grammar.rules
+                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+            ), grammar.getRules()
         )
     }
 
@@ -86,14 +89,12 @@ internal class GrammarTest {
                     " B -> A \n" +
                     " A -> C"
         )
-        grammar.removeHarmfulRules()
-        grammar.removeUselessSymbols()
-        grammar.removeNonterminalRules()
+        grammar.simplifiedGrammar()
         assertEquals(
             mutableSetOf(
-                Grammar.Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
-                Grammar.Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
-            ), grammar.rules
+                Rule(Symbol("S"), listOf(Symbol("a"), Symbol("T"))),
+                Rule(Symbol("T"), listOf(Symbol("b"), Symbol("c"))),
+            ), grammar.getRules()
         )
     }
 

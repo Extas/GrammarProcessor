@@ -1,3 +1,5 @@
+package grammar
+
 /**
  * @author Extas
  * @date 2021/11/11 15:58
@@ -9,10 +11,17 @@ class Grammar {
 
     val terminalSymbols = mutableSetOf<Symbol>()
 
-    val rules = mutableSetOf<Rule>()
+    private val ruleManager = RuleManager()
+
+    fun simplifiedGrammar() {
+        removeHarmfulRules()
+        removeUselessSymbols()
+        removeNonterminalRules()
+    }
 
     // 去除有害规则
     fun removeHarmfulRules() {
+        val rules = ruleManager.getRules()
         val ruleToRemove = mutableSetOf<Rule>()
 
         for (rule in rules) {
@@ -40,6 +49,7 @@ class Grammar {
 
     // 去除不可到达规则
     fun removeUselessSymbols() {
+        val rules = ruleManager.getRules()
         val symbolsToRemove = mutableSetOf<Symbol>()
 
         var flag = true
@@ -64,6 +74,7 @@ class Grammar {
 
     // 去除不可终结规则
     fun removeNonterminalRules() {
+        val rules = ruleManager.getRules()
         // 可终结规则： 右侧都是可终结符
         val stoppableRules = mutableSetOf<Rule>()
 
@@ -100,6 +111,21 @@ class Grammar {
         }
     }
 
+    fun addRule(left: Symbol, right: List<Symbol>) {
+        ruleManager.addRule(Rule(left, right))
+    }
+
+    fun deleteRule(rule: Rule) {
+        ruleManager.deleteRule(rule)
+    }
+
+    fun addNonterminalSymbols(symbols: Symbol) {
+        nonterminalSymbols.add(symbols)
+    }
+
+    fun getRules(): MutableSet<Rule> {
+        return ruleManager.getRules()
+    }
 
     companion object {
         fun fromString(str: String): Grammar {
@@ -114,34 +140,10 @@ class Grammar {
                 val rightSymbols = right.map { Symbol(it) }
                 grammar.nonterminalSymbols.add(leftSymbol)
                 grammar.terminalSymbols.addAll(rightSymbols.filter { it.isTerminal })
-                grammar.rules.add(Rule(leftSymbol, rightSymbols))
+                grammar.addRule(leftSymbol, rightSymbols)
             }
             grammar.startSymbol = grammar.nonterminalSymbols.first()
             return grammar
-        }
-    }
-
-    class Rule(val left: Symbol, val right: List<Symbol>) {
-        override fun toString(): String {
-            return "$left -> ${right.joinToString(" ")}"
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as Rule
-
-            if (left != other.left) return false
-            if (right != other.right) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = left.hashCode()
-            result = 31 * result + right.hashCode()
-            return result
         }
     }
 }
