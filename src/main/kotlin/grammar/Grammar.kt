@@ -21,52 +21,58 @@ class Grammar {
 
     // 去除有害规则
     fun removeHarmfulRules() {
-        val rules = ruleManager.getAllRules()
+        val copyRules = ruleManager.getAllRules()
         val ruleToRemove = mutableSetOf<Rule>()
 
-        for (rule in rules) {
-            if (rule.right.size == 1 && rule.left == rule.right[0]) {
+        for (rule in copyRules) {
+            if (rule.right.size == 1 && rule.right[0].isNonTerminal) {
                 ruleToRemove.add(rule)
             }
         }
 
         for (rule in ruleToRemove) {
-            rules.removeAll { rule == it }
+            removeRule(rule)
+        }
 
-            // 移除的非终结符是否还有其他规则，没有的话，则移除这个非终结符
-            var hasOther = false
-            for (remainingRule in rules) {
-                if (remainingRule.left == rule.right[0]) {
-                    hasOther = true
-                }
-            }
+        val newRules = mutableSetOf<Rule>()
 
-            if (!hasOther) {
-                nonterminalSymbols.remove(rule.right[0])
+        for (rule in ruleToRemove) {
+
+            val rightSymbol = rule.right[0]
+            val ruleToChange = mutableSetOf<Rule>()
+
+            ruleToChange.addAll(getRulesBySymbol(rightSymbol))
+
+            for (changedRule in ruleToChange) {
+                removeRule(changedRule)
+                val newRule = Rule(rule.left, changedRule.right)
+                newRules.add(newRule)
             }
+        }
+
+        for (newRule in newRules) {
+            addRule(newRule)
         }
     }
 
     // 去除不可到达规则
     fun removeUselessSymbols() {
-        val rules = ruleManager.getAllRules()
-        val symbolsToRemove = mutableSetOf<Symbol>()
-
         var flag = true
 
         while (flag) {
             flag = false
+            val copyRules = ruleManager.getAllRules()
+            val symbolsToRemove = mutableSetOf<Symbol>()
 
-            for (rule in rules) {
-                if (rule.left != startSymbol && rules.all { !it.right.contains(rule.left) }) {
+            for (rule in copyRules) {
+                if (rule.left != startSymbol && copyRules.all { !it.right.contains(rule.left) }) {
                     symbolsToRemove.add(rule.left)
                     flag = true // 如果有删除，则继续循环
                 }
             }
 
             for (symbol in symbolsToRemove) {
-                rules.removeAll { it.left == symbol }
-                rules.removeAll { it.right.contains(symbol) }
+                removeRuleBySymbol(symbol)
                 nonterminalSymbols.remove(symbol)
             }
         }
@@ -74,7 +80,7 @@ class Grammar {
 
     // 去除不可终结规则
     private fun removeNonterminalRules() {
-        val rules = ruleManager.getAllRules()
+        val copyRules = ruleManager.getAllRules()
         // 可终结规则： 右侧都是可终结符
         val stoppableRules = mutableSetOf<Rule>()
 
@@ -85,7 +91,7 @@ class Grammar {
 
             val oldRules: MutableSet<Rule> = mutableSetOf<Rule>().apply { addAll(stoppableRules) }
 
-            for (rule in rules) {
+            for (rule in copyRules) {
                 if (rule.right.all { it.isTerminal || it.isEpsilon || stoppableSymbols.contains(it) }) {
                     stoppableRules.add(rule)
                     stoppableSymbols.add(rule.left)
@@ -97,15 +103,18 @@ class Grammar {
             }
         }
 
-        rules.clear()
-        rules.addAll(stoppableRules)
+        copyRules.clear()
+        copyRules.addAll(stoppableRules)
+
+        ruleManager.deleteAllRules()
+        ruleManager.addRules(copyRules)
 
         nonterminalSymbols.clear()
         nonterminalSymbols.addAll(stoppableSymbols)
 
         terminalSymbols.clear()
         terminalSymbols.also {
-            for (rule in rules) {
+            for (rule in copyRules) {
                 it.addAll(rule.right.filter { it.isTerminal })
             }
         }
@@ -121,6 +130,10 @@ class Grammar {
 
     fun removeRule(rule: Rule) {
         ruleManager.deleteRule(rule)
+    }
+
+    private fun removeRuleBySymbol(symbol: Symbol) {
+        ruleManager.deleteRuleBySymbol(symbol)
     }
 
     fun addNonterminalSymbols(symbols: Symbol) {

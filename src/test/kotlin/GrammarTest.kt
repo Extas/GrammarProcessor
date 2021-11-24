@@ -46,8 +46,7 @@ internal class GrammarTest {
         assertEquals(
             mutableSetOf(
                 Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
-                Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
-                Rule(Symbol("U"), mutableListOf(Symbol("T")))
+                Rule(Symbol("U"), mutableListOf(Symbol("b"), Symbol("c"))),
             ), grammar.getRules()
         )
     }
@@ -79,7 +78,8 @@ internal class GrammarTest {
             "S -> aT \n" +
                     " T -> bc \n" +
                     // 有害规则
-                    " U -> U \n" +
+                    " U -> V \n" +
+                    " V -> U \n" +
                     // 不可到达规则
                     " U -> V \n" +
                     " V -> v \n" +

@@ -14,9 +14,25 @@ class RuleManager {
         rules.add(rule)
     }
 
+    fun addRules(rules: Collection<Rule>) {
+        rules.forEach { addRule(it) }
+    }
+
     fun deleteRule(rule: Rule) {
         ruleMap.getOrPut(rule.left) { mutableSetOf() }.remove(rule)
         rules.remove(rule)
+    }
+
+    fun deleteRuleBySymbol(symbol: Symbol) {
+        val toRemoveRules = ruleMap.getOrDefault(symbol, mutableSetOf())
+        for (rule in toRemoveRules) {
+            deleteRule(rule)
+        }
+    }
+
+    fun deleteAllRules() {
+        rules.clear()
+        ruleMap.clear()
     }
 
     fun getRulesBySymbol(symbol: Symbol): MutableSet<Rule> {
@@ -24,6 +40,6 @@ class RuleManager {
     }
 
     fun getAllRules(): MutableSet<Rule> {
-        return rules
+        return mutableSetOf<Rule>().apply { addAll(rules) }
     }
 }
