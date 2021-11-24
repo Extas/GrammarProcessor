@@ -11,7 +11,7 @@ class Grammar {
 
     val terminalSymbols = mutableSetOf<Symbol>()
 
-    private val ruleManager = RuleManager()
+    val ruleManager = RuleManager()
 
     fun simplifiedGrammar() {
         removeHarmfulRules()
@@ -31,7 +31,7 @@ class Grammar {
         }
 
         for (rule in ruleToRemove) {
-            removeRule(rule)
+            ruleManager.deleteRule(rule)
         }
 
         val newRules = mutableSetOf<Rule>()
@@ -41,17 +41,17 @@ class Grammar {
             val rightSymbol = rule.right[0]
             val ruleToChange = mutableSetOf<Rule>()
 
-            ruleToChange.addAll(getRulesBySymbol(rightSymbol))
+            ruleToChange.addAll(ruleManager.getRulesBySymbol(rightSymbol))
 
             for (changedRule in ruleToChange) {
-                removeRule(changedRule)
+                ruleManager.deleteRule(rule)
                 val newRule = Rule(rule.left, changedRule.right)
                 newRules.add(newRule)
             }
         }
 
         for (newRule in newRules) {
-            addRule(newRule)
+            ruleManager.addRule(newRule)
         }
     }
 
@@ -72,7 +72,7 @@ class Grammar {
             }
 
             for (symbol in symbolsToRemove) {
-                removeRuleBySymbol(symbol)
+                ruleManager.removeRuleBySymbol(symbol)
                 nonterminalSymbols.remove(symbol)
             }
         }
@@ -120,32 +120,8 @@ class Grammar {
         }
     }
 
-    fun addRule(left: Symbol, right: MutableList<Symbol>) {
-        ruleManager.addRule(Rule(left, right))
-    }
-
-    fun addRule(rule: Rule) {
-        ruleManager.addRule(rule)
-    }
-
-    fun removeRule(rule: Rule) {
-        ruleManager.deleteRule(rule)
-    }
-
-    private fun removeRuleBySymbol(symbol: Symbol) {
-        ruleManager.deleteRuleBySymbol(symbol)
-    }
-
     fun addNonterminalSymbols(symbols: Symbol) {
         nonterminalSymbols.add(symbols)
-    }
-
-    fun getRules(): MutableSet<Rule> {
-        return ruleManager.getAllRules()
-    }
-
-    fun getRulesBySymbol(symbol: Symbol): MutableSet<Rule> {
-        return ruleManager.getRulesBySymbol(symbol)
     }
 
     companion object {
@@ -161,7 +137,7 @@ class Grammar {
                 val rightSymbols = right.map { Symbol(it) }
                 grammar.nonterminalSymbols.add(leftSymbol)
                 grammar.terminalSymbols.addAll(rightSymbols.filter { it.isTerminal })
-                grammar.addRule(leftSymbol, rightSymbols as MutableList<Symbol>)
+                grammar.ruleManager.addRule(Rule(leftSymbol, rightSymbols as MutableList<Symbol>))
             }
             grammar.startSymbol = grammar.nonterminalSymbols.first()
             return grammar

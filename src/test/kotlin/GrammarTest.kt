@@ -35,7 +35,7 @@ internal class GrammarTest {
             mutableSetOf(
                 Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
                 Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c")))
-            ), grammar.getRules()
+            ), grammar.ruleManager.getAllRules()
         )
     }
 
@@ -47,7 +47,7 @@ internal class GrammarTest {
             mutableSetOf(
                 Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
                 Rule(Symbol("U"), mutableListOf(Symbol("b"), Symbol("c"))),
-            ), grammar.getRules()
+            ), grammar.ruleManager.getAllRules()
         )
     }
 
@@ -68,7 +68,7 @@ internal class GrammarTest {
             mutableSetOf(
                 Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
                 Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
-            ), grammar.getRules()
+            ), grammar.ruleManager.getAllRules()
         )
     }
 
@@ -94,9 +94,7 @@ internal class GrammarTest {
             mutableSetOf(
                 Rule(Symbol("S"), mutableListOf(Symbol("a"), Symbol("T"))),
                 Rule(Symbol("T"), mutableListOf(Symbol("b"), Symbol("c"))),
-            ), grammar.getRules()
+            ), grammar.ruleManager.getAllRules()
         )
     }
-
-
 }

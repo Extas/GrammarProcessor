@@ -23,7 +23,7 @@ class RuleManager {
         rules.remove(rule)
     }
 
-    fun deleteRuleBySymbol(symbol: Symbol) {
+    fun removeRuleBySymbol(symbol: Symbol) {
         val toRemoveRules = ruleMap.getOrDefault(symbol, mutableSetOf())
         for (rule in toRemoveRules) {
             deleteRule(rule)

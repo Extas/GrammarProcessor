@@ -11,7 +11,7 @@ fun removeLeftFactors(grammar: Grammar) {
 
     for (symbol in grammar.nonterminalSymbols) {
 
-        val rulesOfOneSymbol = grammar.getRulesBySymbol(symbol)
+        val rulesOfOneSymbol = grammar.ruleManager.getRulesBySymbol(symbol)
 
         val leftFactorsList = findLeftFactors(rulesOfOneSymbol)
 
@@ -40,21 +40,21 @@ fun findLeftFactors(rules: MutableSet<Rule>): List<List<Symbol>> {
 }
 
 fun changeRules(grammar: Grammar, symbol: Symbol, leftFactors: List<Symbol>, time: Int) {
-    val rulesOfOneSymbol = grammar.getRulesBySymbol(symbol)
+    val rulesOfOneSymbol = grammar.ruleManager.getRulesBySymbol(symbol)
 
     val needToChangeRules = findNeedToChangeRules(rulesOfOneSymbol, leftFactors)
 
     for (rule in needToChangeRules) {
         val newRule = Rule(symbol.derivedSymbols(time), rule.right.subList(leftFactors.size, rule.right.size))
-        grammar.addRule(newRule)
-        grammar.removeRule(rule)
+        grammar.ruleManager.addRule(newRule)
+        grammar.ruleManager.deleteRule(rule)
     }
 
     val newRight = mutableListOf<Symbol>().apply {
         addAll(leftFactors)
         add(symbol.derivedSymbols(time))
     }
-    grammar.addRule(Rule(symbol, newRight))
+    grammar.ruleManager.addRule(Rule(symbol, newRight))
 }
 
 private fun findNeedToChangeRules(
