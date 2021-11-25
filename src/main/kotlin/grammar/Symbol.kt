@@ -9,6 +9,9 @@ class Symbol(val char: String) {
 
     val follow: MutableSet<Symbol> = mutableSetOf()
 
+    val followToString: String
+        get() = "\nSymbol: ${char}; " + (follow.joinToString(separator = " ") { it.char })
+
     fun derivedSymbols(time: Int): Symbol {
         val newChar = "${char}${time + 1}"
         return Symbol(newChar)

@@ -15,6 +15,14 @@ fun generateFirst(grammar: Grammar) {
     }
 }
 
+fun getSymbolFirst(symbol: Symbol, grammar: Grammar): Set<Symbol> {
+    val first = mutableSetOf<Symbol>()
+    for (rule in grammar.ruleManager.getRulesBySymbol(symbol)) {
+        first.addAll(rule.first)
+    }
+    return first
+}
+
 fun firstSet(rule: Rule, grammar: Grammar): Collection<Symbol> {
     if (rule.first.isNotEmpty())
         return rule.first

@@ -124,6 +124,10 @@ class Grammar {
         nonterminalSymbols.add(symbols)
     }
 
+    fun getNonterminalSymbol(symbol: Symbol): Symbol {
+        return nonterminalSymbols.find { it.char == symbol.char } ?: symbol
+    }
+
     companion object {
         fun fromString(str: String): Grammar {
             val grammar = Grammar()
