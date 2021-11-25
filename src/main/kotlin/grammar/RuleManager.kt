@@ -36,10 +36,18 @@ class RuleManager {
     }
 
     fun getRulesBySymbol(symbol: Symbol): MutableSet<Rule> {
-        return ruleMap.getOrDefault(symbol, mutableSetOf())
+        return mutableSetOf<Rule>().apply { addAll(ruleMap.getOrDefault(symbol, mutableSetOf())) }
     }
 
     fun getAllRules(): MutableSet<Rule> {
         return mutableSetOf<Rule>().apply { addAll(rules) }
+    }
+
+    override fun toString(): String {
+        val stringBuilder = StringBuilder()
+        for (rule in rules) {
+            stringBuilder.append(rule.toString()).append("\n")
+        }
+        return stringBuilder.toString()
     }
 }

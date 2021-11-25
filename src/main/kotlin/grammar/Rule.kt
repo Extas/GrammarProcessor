@@ -5,6 +5,12 @@ package grammar
  * @date 2021/11/23 20:45
  */
 class Rule(val left: Symbol, val right: MutableList<Symbol>) {
+
+
+    fun getRightExceptFirst(): List<Symbol> = right.subList(1, right.size)
+
+    fun getRightByIndex(start: Int, end: Int): List<Symbol> = right.subList(start, end)
+
     override fun toString(): String {
         return "$left -> ${right.joinToString(" ")}"
     }

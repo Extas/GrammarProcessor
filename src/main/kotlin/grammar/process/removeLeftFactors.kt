@@ -1,5 +1,8 @@
-package grammar
+package grammar.process
 
+import grammar.Grammar
+import grammar.Rule
+import grammar.Symbol
 import grammar.util.SymbolTree
 
 /**

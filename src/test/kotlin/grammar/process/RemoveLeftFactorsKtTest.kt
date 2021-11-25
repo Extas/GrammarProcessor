@@ -1,5 +1,6 @@
-package grammar
+package grammar.process
 
+import grammar.Grammar
 import org.junit.jupiter.api.Test
 
 /**
@@ -17,7 +18,6 @@ internal class RemoveLeftFactorsKtTest {
                     " S -> aaaDd \n" +
                     " S -> f \n"
         )
-
         removeLeftFactors(grammar)
     }
 }
