@@ -1,11 +1,15 @@
 package grammar
 
+import grammar.table.Table
+
 /**
  * @author Extas
  * @date 2021/11/11 15:58
  */
 class Grammar {
     lateinit var startSymbol: Symbol
+
+    val table: Table = Table()
 
     val nonterminalSymbols = mutableSetOf<Symbol>()
 

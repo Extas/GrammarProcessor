@@ -25,7 +25,7 @@ internal class FirstKtTest {
         )
         generateFirst(grammar)
         for (rule in grammar.ruleManager.getAllRules()) {
-            rule.printFirst()
+            rule.firstToString()
         }
     }
 }

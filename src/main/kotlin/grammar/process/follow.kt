@@ -10,7 +10,7 @@ import grammar.Symbol
  */
 
 fun generateFollow(grammar: Grammar) {
-    grammar.startSymbol.follow.add(Symbol("@"))
+    grammar.startSymbol.follow.add(Symbol("$"))
 
     var hasNew = true
 

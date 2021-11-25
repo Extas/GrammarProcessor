@@ -38,7 +38,7 @@ class Rule(val left: Symbol, val right: MutableList<Symbol>) {
         return result
     }
 
-    fun printFirst() {
+    fun firstToString() {
         println(toString() + "; First = ${first.joinToString(" ")}")
     }
 }
