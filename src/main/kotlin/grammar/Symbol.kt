@@ -7,6 +7,8 @@ package grammar
 class Symbol(val char: String) {
     constructor(char: Char) : this(char.toString())
 
+    val follow: MutableSet<Symbol> = mutableSetOf()
+
     fun derivedSymbols(time: Int): Symbol {
         val newChar = "${char}${time + 1}"
         return Symbol(newChar)

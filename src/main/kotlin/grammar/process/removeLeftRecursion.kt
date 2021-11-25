@@ -39,7 +39,7 @@ private fun getNewRulesToReplace(
     val newRules: MutableList<Rule> = mutableListOf()
     val replaceRuleList: MutableSet<Rule> = grammar.ruleManager.getRulesBySymbol(rightSymbol)
     for (rule in toReplaceRuleList) {
-        val endOfRight = rule.getRightExceptFirst()
+        val endOfRight = rule.getRightExceptStart()
         for (replaceRule in replaceRuleList) {
             val newRule = Rule(leftSymbol, (replaceRule.right + endOfRight) as MutableList<Symbol>)
             newRules.add(newRule)
@@ -66,7 +66,7 @@ fun removeDirectLeftRecursion(symbol: Symbol, grammar: Grammar) {
 fun getNewRules(symbol: Symbol, rules: MutableSet<Rule>): List<Rule> {
     val newSymbol = Symbol("${symbol.char}'")
 
-    val newRules = mutableListOf<Rule>(Rule(newSymbol, mutableListOf(Symbol("$"))))
+    val newRules = mutableListOf<Rule>(Rule(newSymbol, mutableListOf(Symbol("@"))))
 
     val noRecursiveRules = rules.filter { it.right[0] != symbol }
     val recursiveRules = rules.filter { it.right[0] == symbol }
@@ -77,7 +77,7 @@ fun getNewRules(symbol: Symbol, rules: MutableSet<Rule>): List<Rule> {
     }
 
     for (rule in recursiveRules) {
-        val newRule = Rule(newSymbol, (rule.getRightExceptFirst() + newSymbol).toMutableList())
+        val newRule = Rule(newSymbol, (rule.getRightExceptStart() + newSymbol).toMutableList())
         newRules.add(newRule)
     }
 

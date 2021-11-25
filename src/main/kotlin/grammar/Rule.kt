@@ -6,8 +6,13 @@ package grammar
  */
 class Rule(val left: Symbol, val right: MutableList<Symbol>) {
 
+    val first = mutableSetOf<Symbol>()
 
-    fun getRightExceptFirst(): List<Symbol> = right.subList(1, right.size)
+    fun addFirst(first: Collection<Symbol>) {
+        this.first.addAll(first)
+    }
+
+    fun getRightExceptStart(): List<Symbol> = right.subList(1, right.size)
 
     fun getRightByIndex(start: Int, end: Int): List<Symbol> = right.subList(start, end)
 
@@ -31,5 +36,9 @@ class Rule(val left: Symbol, val right: MutableList<Symbol>) {
         var result = left.hashCode()
         result = 31 * result + right.hashCode()
         return result
+    }
+
+    fun printFirst() {
+        println(toString() + "; First = ${first.joinToString(" ")}")
     }
 }
