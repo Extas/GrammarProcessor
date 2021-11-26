@@ -17,7 +17,7 @@ class Rule(val left: Symbol, val right: MutableList<Symbol>) {
     fun getRightByIndex(start: Int, end: Int): List<Symbol> = right.subList(start, end)
 
     override fun toString(): String {
-        return "$left -> ${right.joinToString(" ")}"
+        return "Rule: $left -> ${right.joinToString(" ")}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -38,7 +38,7 @@ class Rule(val left: Symbol, val right: MutableList<Symbol>) {
         return result
     }
 
-    fun firstToString() {
-        println(toString() + "; First = ${first.joinToString(" ")}")
+    fun firstToString(): String {
+        return toString() + "; First = ${first.joinToString(" ")} \n"
     }
 }

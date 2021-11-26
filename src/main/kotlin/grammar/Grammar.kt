@@ -23,6 +23,7 @@ class Grammar {
         removeNonterminalRules()
     }
 
+
     // 去除有害规则
     fun removeHarmfulRules() {
         val copyRules = ruleManager.getAllRules()
@@ -122,10 +123,6 @@ class Grammar {
                 it.addAll(rule.right.filter { it.isTerminal })
             }
         }
-    }
-
-    fun addNonterminalSymbols(symbols: Symbol) {
-        nonterminalSymbols.add(symbols)
     }
 
     fun getNonterminalSymbol(symbol: Symbol): Symbol {

@@ -29,6 +29,10 @@ class Table {
         }
     }
 
+    fun getRuleByNonTermAndTerm(symbol: Symbol, term: Symbol): Rule? {
+        return table[symbol]?.get(term)
+    }
+
     private fun addRulesToTable(symbolSet: MutableSet<Symbol>, rule: Rule) {
         for (symbol in symbolSet) {
             if (symbol.isTerminal) {
