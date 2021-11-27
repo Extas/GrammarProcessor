@@ -20,7 +20,7 @@ class Table {
             addRulesToTable(first, rule)
 
             if (first.contains(Symbol("@"))) {
-                val follow = grammar.getNonterminalSymbol(rule.left).follow
+                val follow = grammar.getFollow(rule.left)
 
                 addRulesToTable(follow, rule)
                 if (follow.contains(Symbol("$")))
@@ -33,7 +33,7 @@ class Table {
         return table[symbol]?.get(term)
     }
 
-    private fun addRulesToTable(symbolSet: MutableSet<Symbol>, rule: Rule) {
+    private fun addRulesToTable(symbolSet: Set<Symbol>, rule: Rule) {
         for (symbol in symbolSet) {
             if (symbol.isTerminal) {
                 addRuleToTable(rule, symbol)

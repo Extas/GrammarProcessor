@@ -26,7 +26,7 @@ internal class FollowKtTest {
         generateFirst(grammar)
         generateFollow(grammar)
         for (symbol in grammar.nonterminalSymbols) {
-            println(symbol.followToString)
+            println(grammar.getFollowToString(symbol))
         }
     }
 }

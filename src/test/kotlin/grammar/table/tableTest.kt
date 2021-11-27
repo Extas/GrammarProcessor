@@ -43,7 +43,7 @@ internal class tableTest {
             rule.firstToString()
         }
         for (symbol in grammar.nonterminalSymbols) {
-            println(symbol.followToString)
+            println(grammar.getFollowToString(symbol))
         }
         println(grammar.table.toString())
     }

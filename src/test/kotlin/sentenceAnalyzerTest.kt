@@ -12,20 +12,27 @@ internal class sentenceAnalyzerTest {
     fun analyze() {
         val analyzer = SentenceAnalyzer()
         val grammar =
-            "S -> aT \n" +
-                    " T -> bc \n" +
-                    // 有害规则
-                    " U -> V \n" +
-                    " V -> U \n" +
-                    // 不可到达规则
-                    " U -> V \n" +
-                    " V -> v \n" +
-                    // 不可终结规则
-                    " T -> C \n" +
-                    " C -> B \n" +
-                    " B -> A \n" +
-                    " A -> C"
-        assertTrue(analyzer.analyze(grammar, "abc"))
+            """
+                S -> aaaT
+                S -> aaT
+                S -> b
+                T -> c
+                T -> Td
+            """.trimIndent()
+//            "S -> aT \n" +
+//                    " T -> bc \n" +
+//                    // 有害规则
+//                    " U -> V \n" +
+//                    " V -> U \n" +
+//                    // 不可到达规则
+//                    " U -> V \n" +
+//                    " V -> v \n" +
+//                    // 不可终结规则
+//                    " T -> C \n" +
+//                    " C -> B \n" +
+//                    " B -> A \n" +
+//                    " A -> C"
+        assertTrue(analyzer.analyze(grammar, "aaac"))
         println(analyzer.analyzeLog.toString())
 
         assertFalse(analyzer.analyze(grammar, "anc"))

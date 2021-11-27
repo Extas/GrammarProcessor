@@ -14,10 +14,8 @@ class Rule(val left: Symbol, val right: MutableList<Symbol>) {
 
     fun getRightExceptStart(): List<Symbol> = right.subList(1, right.size)
 
-    fun getRightByIndex(start: Int, end: Int): List<Symbol> = right.subList(start, end)
-
     override fun toString(): String {
-        return "Rule: $left -> ${right.joinToString(" ")}"
+        return "$left -> ${right.joinToString("")}"
     }
 
     override fun equals(other: Any?): Boolean {

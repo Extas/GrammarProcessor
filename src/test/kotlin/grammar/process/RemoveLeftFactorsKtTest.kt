@@ -12,11 +12,10 @@ internal class RemoveLeftFactorsKtTest {
     @Test
     fun removeLeftFactors() {
         val grammar = Grammar.fromString(
-            "S -> d \n" +
+            "S -> b \n" +
                     " S -> aaB \n" +
                     " S -> aaaC \n" +
-                    " S -> aaaDd \n" +
-                    " S -> f \n"
+                    " S -> aaaDd \n"
         )
         removeLeftFactors(grammar)
     }

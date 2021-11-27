@@ -17,12 +17,14 @@ class Grammar {
 
     val ruleManager = RuleManager()
 
+    val followMap: MutableMap<Symbol, MutableSet<Symbol>> = mutableMapOf()
+
     fun simplifiedGrammar() {
         removeHarmfulRules()
         removeUselessSymbols()
         removeNonterminalRules()
+        ruleManager.sort(startSymbol)
     }
-
 
     // 去除有害规则
     fun removeHarmfulRules() {
@@ -127,6 +129,23 @@ class Grammar {
 
     fun getNonterminalSymbol(symbol: Symbol): Symbol {
         return nonterminalSymbols.find { it.char == symbol.char } ?: symbol
+    }
+
+    fun addNonterminalSymbols(symbols: List<Symbol>) {
+        nonterminalSymbols.addAll(symbols)
+    }
+
+    fun addFollow(symbol: Symbol, follow: Set<Symbol>): Boolean {
+        return followMap.getOrPut(symbol) { mutableSetOf() }.addAll(follow)
+    }
+
+    fun getFollow(symbol: Symbol): Set<Symbol> {
+        return followMap.getOrDefault(symbol, mutableSetOf())
+    }
+
+    fun getFollowToString(symbol: Symbol): String {
+        return ("${symbol.char}: " + followMap.getOrDefault(symbol, mutableSetOf())
+            .joinToString(separator = " ") + "\n")
     }
 
     companion object {

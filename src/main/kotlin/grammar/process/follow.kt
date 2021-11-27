@@ -10,7 +10,7 @@ import grammar.Symbol
  */
 
 fun generateFollow(grammar: Grammar) {
-    grammar.startSymbol.follow.add(Symbol("$"))
+    grammar.addFollow(grammar.startSymbol, setOf(Symbol("$")))
 
     var hasNew = true
 
@@ -28,7 +28,7 @@ fun generateFollow(grammar: Grammar) {
 
                     // 第三种情况：是最后一个
                     if (i == rule.right.size - 1) {
-                        if (grammar.getNonterminalSymbol(symbol).follow.addAll(grammar.getNonterminalSymbol(rule.left).follow)) {
+                        if (grammar.addFollow(symbol, grammar.getFollow(rule.left))) {
                             hasNew = true
                         }
                     }
@@ -56,17 +56,15 @@ private fun isNonTerminal(
         })
 
         val firstSet = firstSet(fakeRule, grammar)
+        val noAtFirstSet = firstSet.filter { it.char != "@" }
         // 如果添加成功，说明有新的
-        if (grammar.getNonterminalSymbol(symbol).follow.addAll(mutableSetOf<Symbol>().apply {
-                addAll(firstSet)
-                remove(Symbol("@"))
-            })) {
+        if (grammar.addFollow(symbol, noAtFirstSet.toSet())) {
             hasNew1 = true
         }
 
         // 第二种情况：first 有空
         if (firstSet.contains(Symbol("@"))) {
-            if (grammar.getNonterminalSymbol(symbol).follow.addAll(grammar.getNonterminalSymbol(rule.left).follow)) {
+            if (grammar.addFollow(symbol, grammar.getFollow(rule.left))) {
                 hasNew1 = true
             }
         }

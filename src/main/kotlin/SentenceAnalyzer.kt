@@ -1,3 +1,6 @@
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import grammar.Grammar
 import grammar.Rule
 import grammar.Symbol
@@ -12,8 +15,8 @@ import java.util.*
  * @date 2021/11/25 18:20
  */
 class SentenceAnalyzer {
-    val analyzeLog: MutableList<String> = mutableListOf()
-    val simplifyResults: MutableList<Rule> = mutableListOf()
+    val analyzeLog: StringBuilder = StringBuilder()
+    var simplifyResults by mutableStateOf("")
     val removeLeftFactorsResults: MutableList<Rule> = mutableListOf()
     val removeLeftRecursionResults: MutableList<Rule> = mutableListOf()
     val follow: StringBuilder = StringBuilder()
@@ -56,30 +59,30 @@ class SentenceAnalyzer {
                         stack.push(symbol)
                     }
                     remainingChar.add(0, char)
-                    analyzeLog.add("$stackLog\t$rule\t$remainingChar \n")
+                    analyzeLog.append("$stackLog || $rule || $remainingChar \n")
                 } else {
-                    analyzeLog.add("Error")
+                    analyzeLog.append("Error")
                     return false
                 }
             }
 
             if (top.isTerminal) {
                 if (top.char[0] == char) {
-                    analyzeLog.add("$stackLog\tMatch: $top\t$remainingChar \n")
+                    analyzeLog.append("$stackLog || Match: $top || $remainingChar \n")
                 } else {
-                    analyzeLog.add("Error")
+                    analyzeLog.append("Error")
                     return false
                 }
             }
         }
 
-        analyzeLog.add("Pass")
+        analyzeLog.append("Pass")
         return true
     }
 
     private fun init() {
         analyzeLog.clear()
-        simplifyResults.clear()
+        simplifyResults = ""
         removeLeftFactorsResults.clear()
         removeLeftRecursionResults.clear()
         follow.clear()
@@ -89,7 +92,7 @@ class SentenceAnalyzer {
     private fun grammarPreprocessing(grammar: Grammar) {
 
         grammar.simplifiedGrammar()
-        simplifyResults.addAll(grammar.ruleManager.getAllRules())
+        simplifyResults = grammar.ruleManager.toString()
 
         removeLeftFactors(grammar)
         removeLeftFactorsResults.addAll(grammar.ruleManager.getAllRules())
@@ -105,7 +108,7 @@ class SentenceAnalyzer {
         }
 
         for (symbol in grammar.nonterminalSymbols) {
-            follow.append(symbol.followToString)
+            follow.append(grammar.getFollowToString(symbol))
         }
 
         grammar.table.buildTable(grammar)

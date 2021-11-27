@@ -1,0 +1,10 @@
+S -> aT
+ T -> bc
+  U -> V
+   V -> U
+ U -> V
+ V -> v
+ T -> C
+  C -> B
+ B -> A 
+  A -> C

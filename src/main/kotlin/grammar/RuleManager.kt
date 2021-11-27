@@ -14,6 +14,17 @@ class RuleManager {
         rules.add(rule)
     }
 
+    fun sort(startSymbol: Symbol) {
+        val startRule = rules.filter { it.left == startSymbol }
+        val list = rules.toMutableList()
+        for (rule in startRule) {
+            list.remove(rule)
+            list.add(0, rule)
+        }
+        rules.clear()
+        rules.addAll(list)
+    }
+
     fun addRules(rules: Collection<Rule>) {
         rules.forEach { addRule(it) }
     }

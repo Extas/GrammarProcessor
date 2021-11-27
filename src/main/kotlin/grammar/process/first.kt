@@ -23,7 +23,7 @@ fun getSymbolFirst(symbol: Symbol, grammar: Grammar): Set<Symbol> {
     return first
 }
 
-fun firstSet(rule: Rule, grammar: Grammar): Collection<Symbol> {
+fun firstSet(rule: Rule, grammar: Grammar): Set<Symbol> {
     if (rule.first.isNotEmpty())
         return rule.first
 

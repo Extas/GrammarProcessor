@@ -11,6 +11,7 @@ import grammar.util.SymbolTree
  */
 
 fun removeLeftFactors(grammar: Grammar) {
+    var newSymbol: List<Symbol> = listOf()
 
     for (symbol in grammar.nonterminalSymbols) {
 
@@ -21,10 +22,11 @@ fun removeLeftFactors(grammar: Grammar) {
         for ((i, leftFactors) in leftFactorsList.withIndex()) {
             if (leftFactors.isNotEmpty()) {
                 // 将此非终结符的所有规则中含有左因子的，替换为新的非终结符
-                changeRules(grammar, symbol, leftFactors, i)
+                newSymbol = changeRules(grammar, symbol, leftFactors, i)
             }
         }
     }
+    grammar.addNonterminalSymbols(newSymbol)
 }
 
 fun findLeftFactors(rules: MutableSet<Rule>): List<List<Symbol>> {
@@ -42,13 +44,16 @@ fun findLeftFactors(rules: MutableSet<Rule>): List<List<Symbol>> {
     return symbolTree.getLeftFactorsList()
 }
 
-fun changeRules(grammar: Grammar, symbol: Symbol, leftFactors: List<Symbol>, time: Int) {
+fun changeRules(grammar: Grammar, symbol: Symbol, leftFactors: List<Symbol>, time: Int): MutableList<Symbol> {
     val rulesOfOneSymbol = grammar.ruleManager.getRulesBySymbol(symbol)
 
     val needToChangeRules = findNeedToChangeRules(rulesOfOneSymbol, leftFactors)
 
+    val newSymbols = mutableListOf<Symbol>()
+
     for (rule in needToChangeRules) {
         val newRule = Rule(symbol.derivedSymbols(time), rule.right.subList(leftFactors.size, rule.right.size))
+        newSymbols.add(symbol.derivedSymbols(time))
         grammar.ruleManager.addRule(newRule)
         grammar.ruleManager.deleteRule(rule)
     }
@@ -58,6 +63,8 @@ fun changeRules(grammar: Grammar, symbol: Symbol, leftFactors: List<Symbol>, tim
         add(symbol.derivedSymbols(time))
     }
     grammar.ruleManager.addRule(Rule(symbol, newRight))
+
+    return newSymbols
 }
 
 private fun findNeedToChangeRules(

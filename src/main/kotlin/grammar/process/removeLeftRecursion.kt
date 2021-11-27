@@ -61,6 +61,14 @@ fun removeDirectLeftRecursion(symbol: Symbol, grammar: Grammar) {
     val newRules = getNewRules(symbol, rules)
 
     grammar.ruleManager.addRules(newRules)
+
+    val newSymbols = mutableListOf<Symbol>()
+
+    for (rule in newRules) {
+        newSymbols.add(rule.left)
+    }
+
+    grammar.addNonterminalSymbols(newSymbols)
 }
 
 fun getNewRules(symbol: Symbol, rules: MutableSet<Rule>): List<Rule> {
